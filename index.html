@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>NFL Player Giphy Project</title>
+
+	<!-- stylesheet? -->
+	<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+	<!-- <script src="JavaScript/gifLogic.js"></script> -->
+
+</head>
+<body>
+	
+	<div class= "playerButtons">
+		
+	</div>
+
+	<form>
+		<label for="player-input">Add a Player</label>
+		<input type="text" id="player-input"></input>
+
+		<input id="addPlayer" type="submit" value="Submit"></input>
+	</form>
+
+	<div class="players">
+		
+	</div>
+	
+	<script>
+		var topics = ["Tom Brady", "Matt Ryan", "Cam Newton", "Marshawn Lynch", "Randy Moss", "Antonio Brown", "Calvin Johnson"];
+
+		for (var i = 0; i < topics.length; i++) {
+			//JSON???
+			var currentPlayer = topics[i];
+
+			var stringChange = currentPlayer.replace(" ", "+");
+
+
+			$(".playerButtons").append('<button data-player=' + stringChange + '>' + topics[i] + '</button>');
+
+		}
+
+		$("button").on("click", function() {
+
+			var player = $(this).attr("data-player");
+
+			var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
+	    player + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+	    	console.log(queryURL);
+
+	      	$.ajax({
+	          url: queryURL,
+	          method: "GET"
+	        })
+	        .done(function(response) {
+	        	console.log(response);
+
+	        	var results = response.data;
+
+	        	for (var i = 0; i < results.length; i++) {
+
+	        		var playerDiv = $("<div>");
+
+	        		var p = $("<p>").text("Rating: " + results[i].rating);
+
+	        		var playerImage = $("<img>");
+
+	        		playerImage.attr("src", results[i].images.fixed_height.url);
+
+	        		playerDiv.append(p);
+           			playerDiv.append(playerImage);
+
+           			$(".players").prepend(playerDiv);
+           		}
+           	});
+        });
+           	
+	</script>
+	
+	
+</body>
+</html>
